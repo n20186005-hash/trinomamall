@@ -57,6 +57,24 @@ const planStops = [
   },
 ];
 
+const airportRoutes = [
+  {
+    mode: 'Fastest',
+    title: 'Taxi / Grab direct',
+    note: 'From NAIA T1, T2, T3 or T4, set your destination directly to TriNoma. In lighter traffic this is usually the simplest option; during peak periods, allow a wider time buffer.',
+  },
+  {
+    mode: 'More predictable',
+    title: 'Airport transfer + MRT-3',
+    note: 'Take a taxi or ride-hailing car from the airport to MRT-3 Taft Avenue Station, then board a northbound train to North Avenue Station. From there, use the pedestrian connection toward TriNoma.',
+  },
+  {
+    mode: 'Budget-first',
+    title: 'Airport bus / PITX + North Avenue',
+    note: 'If keeping costs lower matters most, take an airport bus or shuttle to PITX, then transfer to a northbound bus toward North Avenue and finish with a short walk or local ride to TriNoma. Stops and dispatch points may shift, so confirm on-site signage.',
+  },
+];
+
 const faqs = [
   {
     q: 'Is there an entrance fee for TriNoma?',
@@ -474,11 +492,11 @@ const faqLd = {
         <div class="shell">
           <div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
             <div>
-              <span class="eyebrow">Pin it before you go</span>
-              <h2 class="section-title">TriNoma, North Avenue.</h2>
-              <p class="copy mt-5">EDSA corner North Avenue, Quezon City, Metro Manila, Philippines.</p>
+              <span class="eyebrow">Save this before you go</span>
+              <h2 class="section-title">Get there smoothly.</h2>
+              <p class="copy mt-5">TriNoma stands at the corner of EDSA and North Avenue in Quezon City, Metro Manila, Philippines.</p>
               <a
-                href="https://www.google.com/maps/search/?api=1&query=14.6517913%2C121.0331526"
+                href="https://maps.app.goo.gl/b6AwEDVqWVTFLGhP9"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="mt-7 inline-flex rounded-full bg-charcoal px-5 py-3 font-extrabold text-white hover:bg-canopy-700"
@@ -492,6 +510,23 @@ const faqLd = {
                 referrerpolicy="no-referrer-when-downgrade"
                 allowfullscreen
               ></iframe>
+            </div>
+          </div>
+
+          <div class="mt-10 rounded-[2rem] bg-mist p-7 md:p-9">
+            <span class="eyebrow">From the airport</span>
+            <h3 class="mt-3 font-display text-3xl tracking-tight md:text-4xl">Practical routes from NAIA to TriNoma</h3>
+            <p class="copy mt-4 max-w-3xl">
+              If you are arriving from Ninoy Aquino International Airport, these are the most practical ways to reach TriNoma. A direct car is easiest with luggage, the MRT-3 option can be more reliable when traffic is heavy, and the bus-transfer route works best for tighter budgets.
+            </p>
+            <div class="mt-8 grid gap-4 md:grid-cols-3">
+              {airportRoutes.map((route) => (
+                <article class="rounded-[1.75rem] bg-white p-6 shadow-sm">
+                  <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-600">{route.mode}</div>
+                  <h4 class="mt-4 font-display text-2xl tracking-tight">{route.title}</h4>
+                  <p class="copy mt-3 text-sm">{route.note}</p>
+                </article>
+              ))}
             </div>
           </div>
         </div>
