@@ -1,0 +1,697 @@
+---
+import '../styles/global.css';
+
+const siteUrl = Astro.site;
+const pageTitle = 'TriNoma Visitor Guide | North EDSA, Quezon City';
+const description = 'An independent visitor guide to TriNoma Mall: garden dining, MRT-3 access, parking, costs, suggested visit times, nearby stops, and a private on-device trip list.';
+const canonicalUrl = siteUrl ? new URL(Astro.url.pathname, siteUrl).href : undefined;
+const socialImageUrl = siteUrl ? new URL('/images/trinoma-exterior.webp', siteUrl).href : undefined;
+
+const openingHours = [
+  { day: 'Monday–Friday', hours: '11:00 AM–9:00 PM' },
+  { day: 'Saturday–Sunday', hours: '10:00 AM–10:00 PM' },
+];
+
+const planStops = [
+  {
+    id: 'garden-restaurants',
+    number: '01',
+    title: 'Garden Restaurants',
+    note: 'Start with the open-air landscaped side of TriNoma for a slower, greener first impression.',
+    time: '45–75 min',
+  },
+  {
+    id: 'mall-browse',
+    number: '02',
+    title: 'Mall + Landmark browse',
+    note: 'Move through the main retail floors, cafés and department-store connection at your own pace.',
+    time: '60–90 min',
+  },
+  {
+    id: 'cinema-break',
+    number: '03',
+    title: 'Cinema or indoor break',
+    note: 'Turn the visit into an easy half-day with a movie, coffee stop or indoor entertainment.',
+    time: 'Optional',
+  },
+  {
+    id: 'vertis-north',
+    number: '04',
+    title: 'Ayala Malls Vertis North',
+    note: 'Pair TriNoma with the adjacent North Triangle district for a broader shopping and dining loop.',
+    time: '60–120 min',
+  },
+  {
+    id: 'sm-north-edsa',
+    number: '05',
+    title: 'SM City North EDSA',
+    note: 'Add another major North EDSA mall if shopping variety is the goal of your day.',
+    time: '60–120 min',
+  },
+  {
+    id: 'wildlife-center',
+    number: '06',
+    title: 'Ninoy Aquino Parks & Wildlife Center',
+    note: 'Switch from retail to trees and open space for a more balanced Quezon City day.',
+    time: '60–90 min',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Is there an entrance fee for TriNoma?',
+    a: 'General mall entry is free. You pay only for what you choose to buy or use, such as food, shopping, cinema tickets, entertainment, parking, or separately ticketed events.',
+  },
+  {
+    q: 'Which train station is best for TriNoma?',
+    a: 'MRT-3 North Avenue Station is the most direct rail stop. A pedestrian connection links the station side with TriNoma, making rail the simplest option when EDSA road traffic is heavy.',
+  },
+  {
+    q: 'When is the best time to visit?',
+    a: 'For a calmer browse, arrive close to opening on a weekday. For the landscaped Garden Restaurants atmosphere, late afternoon into early evening is a pleasant choice.',
+  },
+  {
+    q: 'How long should I stay?',
+    a: 'Allow about two hours for a quick browse. Three to five hours works well for shopping plus a meal and garden time; add more time if you plan to watch a movie.',
+  },
+  {
+    q: 'Can I park at TriNoma?',
+    a: 'Yes. Ayala Malls lists the North and Mindanao carpark buildings. Posted operating hours and rates can change, so confirm the signage at the entrance before leaving your vehicle for an extended period.',
+  },
+  {
+    q: 'Does the itinerary feature send my data anywhere?',
+    a: 'No. Saved stops are stored only in your current browser using localStorage. This guide has no account system, database, or server-side itinerary storage.',
+  },
+];
+
+const attractionLd = {
+  '@context': 'https://schema.org',
+  '@type': ['TouristAttraction', 'LocalBusiness'],
+  name: 'TriNoma',
+  alternateName: 'TriNoma Mall',
+  description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'EDSA corner North Avenue',
+    addressLocality: 'Quezon City',
+    addressRegion: 'Metro Manila',
+    addressCountry: 'PH',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 14.6517913,
+    longitude: 121.0331526,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '11:00',
+      closes: '21:00',
+    },
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Saturday', 'Sunday'],
+      opens: '10:00',
+      closes: '22:00',
+    },
+  ],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '3.9',
+    reviewCount: '78',
+    bestRating: '5',
+  },
+  isAccessibleForFree: true,
+  priceRange: 'Free general entry; shopping, dining, parking and paid attractions vary',
+  ...(siteUrl
+    ? {
+        url: new URL('/', siteUrl).href,
+        image: [
+          new URL('/images/trinoma-exterior.webp', siteUrl).href,
+          new URL('/images/trinoma-garden.webp', siteUrl).href,
+        ],
+      }
+    : {}),
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: a,
+    },
+  })),
+};
+---
+
+<!doctype html>
+<html lang="en-PH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#17211c" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="en_PH" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
+    <meta name="twitter:card" content={socialImageUrl ? 'summary_large_image' : 'summary'} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(attractionLd)}></script>
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)}></script>
+
+    <!-- GA4: the only third-party script intentionally loaded by this guide. -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HXM22WWPKP');
+    </script>
+  </head>
+  <body class="overflow-x-hidden antialiased">
+    <header class="absolute inset-x-0 top-0 z-30 py-5">
+      <div class="shell flex items-center justify-between gap-5">
+        <a href="#top" class="rounded-full bg-white/90 px-4 py-3 shadow-lg shadow-black/10 backdrop-blur" aria-label="TriNoma visitor guide home">
+          <img src="/logo.svg" width="178" height="40" alt="TriNoma Visitor Guide" />
+        </a>
+        <nav class="hidden items-center gap-1 rounded-full bg-charcoal/85 p-1.5 text-sm font-semibold text-white backdrop-blur md:flex" aria-label="Primary navigation">
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#visit">Plan</a>
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#eat">Eat</a>
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#arrive">Arrive</a>
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#nearby">Nearby</a>
+          <a class="rounded-full bg-lime px-4 py-2 text-charcoal hover:brightness-95" href="#map">Map</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="relative min-h-[830px] bg-charcoal text-white lg:min-h-[760px]">
+        <img
+          src="/images/trinoma-exterior.webp"
+          alt="TriNoma exterior along North EDSA in Quezon City"
+          width="1800"
+          height="1355"
+          fetchpriority="high"
+          class="absolute inset-0 h-full w-full object-cover opacity-55"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(23,33,28,.92)_0%,rgba(23,33,28,.58)_48%,rgba(23,33,28,.18)_100%)]"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(0deg,rgba(23,33,28,.72),transparent_44%)]"></div>
+
+        <div class="shell relative flex min-h-[830px] items-end pb-16 pt-40 lg:min-h-[760px] lg:items-center lg:pb-0">
+          <div class="max-w-[800px]">
+            <div class="mb-7 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[.18em] backdrop-blur">
+              <span class="h-2 w-2 rounded-full bg-lime"></span>
+              North EDSA · Quezon City
+            </div>
+            <h1 class="font-display text-[clamp(3.5rem,10vw,8.6rem)] leading-[.83] tracking-[-.055em]">
+              City energy.<br /><span class="italic text-lime">Garden pause.</span>
+            </h1>
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-white/78 md:text-xl">
+              A visitor-first guide to TriNoma—part North EDSA shopping hub, part landscaped breather, with MRT-3 access built into the rhythm of the day.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3">
+              <a href="#visit" class="rounded-full bg-lime px-6 py-3.5 font-extrabold text-charcoal transition hover:-translate-y-0.5">Build your visit</a>
+              <a href="#arrive" class="rounded-full border border-white/25 bg-white/10 px-6 py-3.5 font-bold text-white backdrop-blur hover:bg-white/15">How to get there</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="shell relative -mb-16 grid translate-y-1/2 grid-cols-2 overflow-hidden rounded-[2rem] bg-white text-charcoal shadow-2xl shadow-black/25 md:grid-cols-4">
+          <div class="border-b border-r border-charcoal/10 p-5 md:border-b-0 md:p-7">
+            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">Weekdays</div>
+            <div class="mt-2 font-display text-2xl tracking-tight">11 AM–9 PM</div>
+          </div>
+          <div class="border-b border-charcoal/10 p-5 md:border-b-0 md:border-r md:p-7">
+            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">Weekends</div>
+            <div class="mt-2 font-display text-2xl tracking-tight">10 AM–10 PM</div>
+          </div>
+          <div class="border-r border-charcoal/10 p-5 md:p-7">
+            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">Rail stop</div>
+            <div class="mt-2 font-display text-2xl tracking-tight">MRT-3 North Ave.</div>
+          </div>
+          <div class="p-5 md:p-7">
+            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">General entry</div>
+            <div class="mt-2 font-display text-2xl tracking-tight">Free</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pb-24 pt-36 md:pb-32 md:pt-44">
+        <div class="shell grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
+          <div>
+            <span class="eyebrow">The TriNoma mood</span>
+            <h2 class="section-title">A mall that makes room for <span class="italic text-canopy-600">green.</span></h2>
+            <p class="copy mt-7 max-w-xl text-lg">
+              TriNoma sits in one of Metro Manila’s busiest transport-and-retail zones, yet its landscaped Garden Restaurants area gives the visit a softer counterpoint. Come for practical shopping; stay for the change of pace between indoor retail and open-air planting.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-2 text-sm font-bold">
+              <span class="rounded-full bg-canopy-100 px-4 py-2 text-canopy-800">Open-air gardens</span>
+              <span class="rounded-full bg-white px-4 py-2 shadow-sm">Food + cinema</span>
+              <span class="rounded-full bg-white px-4 py-2 shadow-sm">Direct rail access</span>
+              <span class="rounded-full bg-white px-4 py-2 shadow-sm">North Triangle base</span>
+            </div>
+          </div>
+          <div class="relative mx-auto w-full max-w-[680px]">
+            <div class="dot-grid absolute -left-7 -top-7 h-52 w-52 rounded-[2rem]"></div>
+            <img
+              src="/images/trinoma-garden.webp"
+              alt="Landscaped Garden Restaurants area at TriNoma"
+              width="1800"
+              height="1355"
+              loading="lazy"
+              class="photo-mask relative aspect-[4/3] w-full object-cover shadow-2xl shadow-canopy-900/15"
+            />
+            <div class="glass absolute -bottom-5 right-0 max-w-[260px] rounded-3xl p-5 md:right-5">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-600">Best contrast</div>
+              <div class="mt-2 font-display text-xl leading-tight">Retail inside. Leafy pause outside.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="visit" class="bg-canopy-900 py-24 text-white md:py-32">
+        <div class="shell">
+          <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <span class="eyebrow !text-lime">Your day, not ours</span>
+              <h2 class="section-title max-w-3xl">Build a loose itinerary.</h2>
+            </div>
+            <p class="max-w-md text-sm leading-6 text-white/65">
+              Tap any stop to save it. Your list stays in this browser only—no login, upload or server storage.
+            </p>
+          </div>
+
+          <div class="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {planStops.map((stop) => (
+              <article class="group flex min-h-[280px] flex-col rounded-[2rem] border border-white/10 bg-white/[.06] p-7 transition hover:-translate-y-1 hover:bg-white/[.09]">
+                <div class="flex items-start justify-between gap-4">
+                  <span class="font-display text-5xl italic text-lime/70">{stop.number}</span>
+                  <span class="rounded-full border border-white/15 px-3 py-1.5 text-xs font-bold text-white/60">{stop.time}</span>
+                </div>
+                <h3 class="mt-8 font-display text-3xl tracking-tight">{stop.title}</h3>
+                <p class="mt-3 flex-1 text-sm leading-6 text-white/62">{stop.note}</p>
+                <button
+                  type="button"
+                  class="plan-toggle mt-7 inline-flex w-fit items-center gap-2 rounded-full border border-white/25 px-4 py-2.5 text-sm font-extrabold transition hover:border-lime hover:text-lime"
+                  data-plan-id={stop.id}
+                  data-plan-title={stop.title}
+                  data-plan-note={stop.note}
+                  aria-pressed="false"
+                >
+                  <span aria-hidden="true">＋</span><span class="plan-label">Add to my day</span>
+                </button>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="eat" class="py-24 md:py-32">
+        <div class="shell grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:gap-18">
+          <div class="overflow-hidden rounded-[2.5rem] bg-charcoal">
+            <img
+              src="/images/trinoma-interior.webp"
+              alt="Interior retail levels inside TriNoma"
+              width="1800"
+              height="1355"
+              loading="lazy"
+              class="aspect-[4/3] h-full min-h-[480px] w-full object-cover opacity-90"
+            />
+          </div>
+          <div class="py-2 lg:py-8">
+            <span class="eyebrow">Around the table</span>
+            <h2 class="section-title">Eat with a little <span class="italic text-canopy-600">air.</span></h2>
+            <p class="copy mt-6 text-lg">
+              The Garden Restaurants side is the natural place to anchor a meal, while the indoor floors cover quick bites, cafés and full-service dining. Restaurant line-ups do change, so use the mall directory for the live tenant list.
+            </p>
+            <div class="mt-9 space-y-3">
+              <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
+                <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">Ramen mood</div>
+                <div class="mt-1 font-display text-2xl">Hanamaruken Ramen</div>
+                <p class="copy mt-2 text-sm">A comfortable sit-down option when you want something warm and substantial.</p>
+              </div>
+              <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
+                <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">Long lunch</div>
+                <div class="mt-1 font-display text-2xl">Italianni’s</div>
+                <p class="copy mt-2 text-sm">An easy pick for a slower shared meal between shopping blocks.</p>
+              </div>
+              <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
+                <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">More choices</div>
+                <div class="mt-1 font-display text-2xl">Shou La Mien · Ramen Kuroda · TGI Friday’s</div>
+                <p class="copy mt-2 text-sm">Examples from the mall’s dining mix; check the live directory for relocations, closures and new openings.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="arrive" class="border-y border-charcoal/10 bg-white py-24 md:py-32">
+        <div class="shell">
+          <div class="grid gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-18">
+            <div>
+              <span class="eyebrow">Getting there</span>
+              <h2 class="section-title">Let North Avenue do the hard part.</h2>
+              <p class="copy mt-6 text-lg">
+                TriNoma is unusually practical for a Manila mall day because rail, road transport and the retail district meet in the same North Avenue–EDSA pocket.
+              </p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <article class="rounded-[2rem] bg-mist p-7">
+                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-canopy-900 font-black text-lime">M</div>
+                <h3 class="font-display text-2xl">MRT-3</h3>
+                <p class="copy mt-3 text-sm">Get off at <strong>North Avenue Station</strong>. A pedestrian connection links the station side directly toward TriNoma, avoiding an EDSA street crossing.</p>
+              </article>
+              <article class="rounded-[2rem] bg-mist p-7">
+                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-canopy-900 font-black text-lime">UV</div>
+                <h3 class="font-display text-2xl">PUV / UV</h3>
+                <p class="copy mt-3 text-sm">The transport terminal around North Avenue and Mindanao Avenue serves local public-utility routes. Route loading points can shift, so confirm signage on arrival.</p>
+              </article>
+              <article class="rounded-[2rem] bg-mist p-7">
+                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-canopy-900 font-black text-lime">P2P</div>
+                <h3 class="font-display text-2xl">Point-to-point bus</h3>
+                <p class="copy mt-3 text-sm">A P2P terminal operates beside the mall area. Operators and schedules are time-sensitive; check the current departure board or operator channel before relying on a specific trip.</p>
+              </article>
+              <article class="rounded-[2rem] bg-mist p-7">
+                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-canopy-900 font-black text-lime">CAR</div>
+                <h3 class="font-display text-2xl">Taxi / ride-hailing</h3>
+                <p class="copy mt-3 text-sm">Set the destination to TriNoma and use the indicated mall drop-off. During peak EDSA periods, allow buffer time for the final approach.</p>
+              </article>
+            </div>
+          </div>
+
+          <figure class="mt-14 overflow-hidden rounded-[2.5rem] bg-charcoal md:grid md:grid-cols-[1.2fr_.8fr]">
+            <img
+              src="/images/north-avenue-mrt.webp"
+              alt="MRT-3 North Avenue Station viewed from TriNoma"
+              width="1800"
+              height="1355"
+              loading="lazy"
+              class="h-full min-h-[330px] w-full object-cover"
+            />
+            <figcaption class="flex flex-col justify-center p-8 text-white md:p-10">
+              <span class="text-xs font-black uppercase tracking-[.16em] text-lime">The easiest landmark</span>
+              <p class="mt-4 font-display text-3xl leading-tight">See North Avenue Station? You’re already in the right pocket.</p>
+              <p class="mt-4 text-sm leading-6 text-white/60">This is the transport advantage that makes TriNoma work well as a meeting point or a first stop before exploring the rest of Quezon City.</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="py-24 md:py-32">
+        <div class="shell">
+          <div class="grid gap-5 lg:grid-cols-3">
+            <article class="rounded-[2rem] bg-canopy-100 p-7 md:p-8">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-700">Tickets / cost</div>
+              <h2 class="mt-3 font-display text-4xl tracking-tight">Walk in free.</h2>
+              <p class="copy mt-4">There is no general admission ticket for the mall. Budget separately for cinema, entertainment, food, shopping, parking and any special ticketed event.</p>
+            </article>
+            <article class="rounded-[2rem] bg-charcoal p-7 text-white md:p-8">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-lime">Parking</div>
+              <h2 class="mt-3 font-display text-4xl tracking-tight">North + Mindanao.</h2>
+              <p class="mt-4 leading-7 text-white/65">Ayala Malls lists North and Mindanao carpark buildings, with the official page noting 5:00 AM–2:00 AM and stays beyond 2:00 AM treated as overnight. Check current rates and notices at entry.</p>
+            </article>
+            <article class="rounded-[2rem] bg-[#e8d5c7] p-7 md:p-8">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-[#7c4c35]">Best visit / duration</div>
+              <h2 class="mt-3 font-display text-4xl tracking-tight">2 hours—or half a day.</h2>
+              <p class="copy mt-4">Weekday opening is best for a calmer browse; late afternoon suits garden ambience. Plan ~2 hours for a quick pass or 3–5 hours with a meal, shopping and a relaxed break.</p>
+            </article>
+          </div>
+          <p class="mt-4 text-xs leading-5 text-charcoal/50">Holiday schedules, parking rules, rates, transport departures, tenant mix and public ratings can change. Check live official or on-site information before a time-sensitive visit.</p>
+        </div>
+      </section>
+
+      <section id="nearby" class="bg-[#e9eee5] py-24 md:py-32">
+        <div class="shell">
+          <div class="max-w-3xl">
+            <span class="eyebrow">Nearby, if you have time</span>
+            <h2 class="section-title">Turn one mall stop into a <span class="italic text-canopy-600">Quezon City loop.</span></h2>
+          </div>
+          <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <article class="rounded-[2rem] bg-white p-6">
+              <div class="text-xs font-black text-canopy-600">01 · SAME DISTRICT</div>
+              <h3 class="mt-5 font-display text-2xl">Ayala Malls Vertis North</h3>
+              <p class="copy mt-3 text-sm">A natural extension of a North Triangle shopping-and-dining day.</p>
+            </article>
+            <article class="rounded-[2rem] bg-white p-6">
+              <div class="text-xs font-black text-canopy-600">02 · NORTH EDSA</div>
+              <h3 class="mt-5 font-display text-2xl">SM City North EDSA</h3>
+              <p class="copy mt-3 text-sm">Another large retail stop for shoppers who want maximum variety in one district.</p>
+            </article>
+            <article class="rounded-[2rem] bg-white p-6">
+              <div class="text-xs font-black text-canopy-600">03 · GREEN RESET</div>
+              <h3 class="mt-5 font-display text-2xl">Ninoy Aquino Parks & Wildlife Center</h3>
+              <p class="copy mt-3 text-sm">Swap climate-controlled retail for trees, open space and a more outdoorsy pace.</p>
+            </article>
+            <article class="rounded-[2rem] bg-white p-6">
+              <div class="text-xs font-black text-canopy-600">04 · QC LANDMARK</div>
+              <h3 class="mt-5 font-display text-2xl">Quezon Memorial Circle</h3>
+              <p class="copy mt-3 text-sm">A landmark-and-park counterpoint if you want to stretch the day beyond North EDSA.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="map" class="py-24 md:py-32">
+        <div class="shell">
+          <div class="grid gap-10 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+            <div>
+              <span class="eyebrow">Pin it before you go</span>
+              <h2 class="section-title">TriNoma, North Avenue.</h2>
+              <p class="copy mt-5">EDSA corner North Avenue, Quezon City, Metro Manila, Philippines.</p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=14.6517913%2C121.0331526"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-7 inline-flex rounded-full bg-charcoal px-5 py-3 font-extrabold text-white hover:bg-canopy-700"
+              >Open in Google Maps ↗</a>
+            </div>
+            <div class="map-frame overflow-hidden rounded-[2.5rem] border border-charcoal/10 bg-white p-2 shadow-xl shadow-canopy-900/10">
+              <iframe
+                title="TriNoma Mall map"
+                src="https://www.google.com/maps?q=14.6517913%2C121.0331526&hl=en&region=PH&z=17&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-y border-charcoal/10 bg-white py-24 md:py-32">
+        <div class="shell grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
+          <div>
+            <span class="eyebrow">FAQ</span>
+            <h2 class="section-title">Useful before you leave.</h2>
+          </div>
+          <div class="divide-y divide-charcoal/10 border-y border-charcoal/10">
+            {faqs.map((item, index) => (
+              <details class="group py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-5 py-5 font-display text-xl font-bold md:text-2xl">
+                  <span><span class="mr-3 text-sm font-black text-canopy-600">{String(index + 1).padStart(2, '0')}</span>{item.q}</span>
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-canopy-100 font-sans text-lg transition group-open:rotate-45">＋</span>
+                </summary>
+                <p class="copy max-w-3xl pb-6 pl-0 text-sm md:pl-10 md:text-base">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="py-16">
+        <div class="shell rounded-[2rem] border border-charcoal/10 bg-[#f0efe8] p-7 md:p-9">
+          <div class="grid gap-6 md:grid-cols-[.7fr_1.3fr]">
+            <div>
+              <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-600">Photo credits</div>
+              <h2 class="mt-2 font-display text-2xl">Real place. Real photographs.</h2>
+            </div>
+            <div class="copy text-sm">
+              <p>Site photographs are local, web-optimized copies of Wikimedia Commons images by <strong>Ralff Nestor Nacor</strong>, licensed under <a class="underline decoration-canopy-400 underline-offset-4" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="license noopener noreferrer">CC BY-SA 4.0</a>.</p>
+              <p class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs">
+                <a class="underline" href="https://commons.wikimedia.org/wiki/File:Trinoma_Mall,_Q.C.,_Mar_2025.jpg" target="_blank" rel="noopener noreferrer">Exterior source</a>
+                <a class="underline" href="https://commons.wikimedia.org/wiki/File:Garden_Restaurants,_Trinoma,_Q.C.,_Jul_2024.jpg" target="_blank" rel="noopener noreferrer">Garden source</a>
+                <a class="underline" href="https://commons.wikimedia.org/wiki/File:Trinoma_Mall_Interior,_Q.C.,_Jun_2026.jpg" target="_blank" rel="noopener noreferrer">Interior source</a>
+                <a class="underline" href="https://commons.wikimedia.org/wiki/File:MRT-3_North_Avenue_Station_(View_from_Trinoma_Mall),_Q.C.,_Aug_2026.jpg" target="_blank" rel="noopener noreferrer">MRT source</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-charcoal py-10 text-white">
+      <div class="shell flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div>
+          <img src="/logo.svg" width="178" height="40" alt="TriNoma Visitor Guide" class="brightness-0 invert" loading="lazy" />
+          <p class="mt-4 max-w-xl text-xs leading-5 text-white/50">Independent visitor guide. Not affiliated with, endorsed by, or operated by Ayala Malls or TriNoma.</p>
+        </div>
+        <a class="text-sm font-bold text-lime hover:underline" href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+      <aside id="plan-panel" class="glass hidden w-[min(92vw,390px)] rounded-[2rem] border border-white/60 p-5" aria-label="Saved itinerary" aria-live="polite">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">On this device</div>
+            <h2 class="mt-1 font-display text-2xl">My TriNoma day</h2>
+          </div>
+          <button id="plan-close" type="button" class="flex h-9 w-9 items-center justify-center rounded-full bg-charcoal/5 font-bold" aria-label="Close itinerary">×</button>
+        </div>
+        <div id="plan-empty" class="mt-5 rounded-2xl bg-canopy-50 p-4 text-sm leading-6 text-charcoal/60">Nothing saved yet. Add a stop from the itinerary cards.</div>
+        <ol id="plan-items" class="mt-4 space-y-2"></ol>
+        <button id="plan-clear" type="button" class="mt-4 hidden text-xs font-extrabold text-charcoal/50 underline underline-offset-4">Clear saved list</button>
+        <p class="mt-4 text-[11px] leading-4 text-charcoal/45">Stored only in localStorage in this browser. Nothing is uploaded.</p>
+      </aside>
+      <button id="plan-open" type="button" class="flex items-center gap-3 rounded-full bg-lime px-5 py-3.5 font-extrabold text-charcoal shadow-xl shadow-black/20 transition hover:-translate-y-0.5" aria-expanded="false" aria-controls="plan-panel">
+        <span>My day</span><span id="plan-count" class="flex h-7 min-w-7 items-center justify-center rounded-full bg-charcoal px-2 text-xs text-white">0</span>
+      </button>
+    </div>
+
+    <script>
+      type PlanItem = { id: string; title: string; note: string };
+
+      const STORAGE_KEY = 'trinoma-visitor-plan-v1';
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.plan-toggle'));
+      const panel = document.querySelector<HTMLElement>('#plan-panel');
+      const openButton = document.querySelector<HTMLButtonElement>('#plan-open');
+      const closeButton = document.querySelector<HTMLButtonElement>('#plan-close');
+      const clearButton = document.querySelector<HTMLButtonElement>('#plan-clear');
+      const count = document.querySelector<HTMLElement>('#plan-count');
+      const list = document.querySelector<HTMLOListElement>('#plan-items');
+      const empty = document.querySelector<HTMLElement>('#plan-empty');
+
+      const readPlan = (): PlanItem[] => {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (!saved) return [];
+          const parsed: unknown = JSON.parse(saved);
+          if (!Array.isArray(parsed)) return [];
+          return parsed.filter((item): item is PlanItem =>
+            typeof item === 'object' && item !== null &&
+            typeof (item as PlanItem).id === 'string' &&
+            typeof (item as PlanItem).title === 'string' &&
+            typeof (item as PlanItem).note === 'string'
+          );
+        } catch {
+          return [];
+        }
+      };
+
+      let plan: PlanItem[] = readPlan();
+
+      const writePlan = () => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+      };
+
+      const syncButtons = () => {
+        const ids = new Set(plan.map((item) => item.id));
+        buttons.forEach((button) => {
+          const added = ids.has(button.dataset.planId ?? '');
+          button.dataset.added = String(added);
+          button.setAttribute('aria-pressed', String(added));
+          const label = button.querySelector<HTMLElement>('.plan-label');
+          if (label) label.textContent = added ? 'Saved to my day' : 'Add to my day';
+          const icon = button.querySelector<HTMLElement>('span[aria-hidden="true"]');
+          if (icon) icon.textContent = added ? '✓' : '＋';
+        });
+      };
+
+      const render = () => {
+        if (!count || !list || !empty || !clearButton) return;
+        count.textContent = String(plan.length);
+        list.replaceChildren();
+        empty.classList.toggle('hidden', plan.length > 0);
+        clearButton.classList.toggle('hidden', plan.length === 0);
+
+        plan.forEach((item, index) => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start gap-3 rounded-2xl bg-white p-3 shadow-sm';
+
+          const number = document.createElement('span');
+          number.className = 'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-canopy-100 text-xs font-black text-canopy-700';
+          number.textContent = String(index + 1).padStart(2, '0');
+
+          const text = document.createElement('div');
+          text.className = 'min-w-0 flex-1';
+          const title = document.createElement('div');
+          title.className = 'font-extrabold text-sm';
+          title.textContent = item.title;
+          const note = document.createElement('div');
+          note.className = 'mt-1 text-xs leading-5 text-charcoal/50';
+          note.textContent = item.note;
+          text.append(title, note);
+
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-charcoal/40 hover:bg-charcoal/5';
+          remove.setAttribute('aria-label', `Remove ${item.title}`);
+          remove.textContent = '×';
+          remove.addEventListener('click', () => {
+            plan = plan.filter((saved) => saved.id !== item.id);
+            writePlan();
+            render();
+          });
+
+          li.append(number, text, remove);
+          list.append(li);
+        });
+
+        syncButtons();
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const id = button.dataset.planId;
+          const title = button.dataset.planTitle;
+          const note = button.dataset.planNote;
+          if (!id || !title || !note) return;
+
+          const exists = plan.some((item) => item.id === id);
+          plan = exists ? plan.filter((item) => item.id !== id) : [...plan, { id, title, note }];
+          writePlan();
+          render();
+        });
+      });
+
+      openButton?.addEventListener('click', () => {
+        const isHidden = panel?.classList.contains('hidden') ?? true;
+        panel?.classList.toggle('hidden', !isHidden);
+        openButton.setAttribute('aria-expanded', String(isHidden));
+      });
+
+      closeButton?.addEventListener('click', () => {
+        panel?.classList.add('hidden');
+        openButton?.setAttribute('aria-expanded', 'false');
+        openButton?.focus();
+      });
+
+      clearButton?.addEventListener('click', () => {
+        plan = [];
+        writePlan();
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
