@@ -2,8 +2,8 @@
 import '../styles/global.css';
 
 const siteUrl = Astro.site;
-const pageTitle = 'TriNoma Visitor Guide | North EDSA, Quezon City';
-const description = 'An independent visitor guide to TriNoma Mall: garden dining, MRT-3 access, parking, costs, suggested visit times, nearby stops, and a private on-device trip list.';
+const pageTitle = 'TriNoma Mall Quezon City Visitor Guide';
+const description = 'TriNoma Mall in Quezon City: MRT-3 North Avenue access, free entry, garden restaurants, parking, mall hours (Mon–Fri 11 AM–9 PM, Sat–Sun 10 AM–10 PM) and a store directory. Plan your visit.';
 const canonicalUrl = siteUrl ? new URL(Astro.url.pathname, siteUrl).href : undefined;
 const socialImageUrl = siteUrl ? new URL('/images/trinoma-exterior.webp', siteUrl).href : undefined;
 
@@ -81,8 +81,24 @@ const faqs = [
     a: 'General mall entry is free. You pay only for what you choose to buy or use, such as food, shopping, cinema tickets, entertainment, parking, or separately ticketed events.',
   },
   {
+    q: 'What are TriNoma’s mall hours?',
+    a: 'Standard hours are Monday–Friday 11:00 AM–9:00 PM and Saturday–Sunday 10:00 AM–10:00 PM. Holiday and special-event schedules can differ, so check the live directory or on-site notices before a time-sensitive visit.',
+  },
+  {
     q: 'Which train station is best for TriNoma?',
     a: 'MRT-3 North Avenue Station is the most direct rail stop. A pedestrian connection links the station side with TriNoma, making rail the simplest option when EDSA road traffic is heavy.',
+  },
+  {
+    q: 'What restaurants are at TriNoma?',
+    a: 'TriNoma spans garden-side dining and indoor restaurants, from ramen and Italian to Filipino and café options. Tenant line-ups change, so use the live mall directory for the current restaurant list.',
+  },
+  {
+    q: 'What stores are in TriNoma?',
+    a: 'The mall mixes fashion, tech and mobile, home and lifestyle, and dining across its levels, anchored by The Landmark department store and supermarket. For the latest tenant list, check the official Ayala Malls TriNoma directory.',
+  },
+  {
+    q: 'Is TriNoma the same as SM North EDSA?',
+    a: 'No. TriNoma and SM City North EDSA are separate malls in the North EDSA district, a short distance apart. TriNoma connects directly to MRT-3 North Avenue Station.',
   },
   {
     q: 'When is the best time to visit?',
@@ -102,12 +118,28 @@ const faqs = [
   },
 ];
 
+const diningCategories = [
+  { label: 'Japanese & ramen', note: 'Ramen counters and Japanese comfort food, such as Hanamaruken Ramen, Shou La Mien and Ramen Kuroda.' },
+  { label: 'Italian & American', note: 'Sit-down favourites like Italianni’s and TGI Friday’s for a slower shared meal.' },
+  { label: 'Filipino & quick bites', note: 'Casual Filipino plates and fast-food counters for a fast refuel between shopping blocks.' },
+  { label: 'Cafés & dessert', note: 'Coffee stops and sweet breaks spread across the indoor levels and garden side.' },
+];
+
+const storeCategories = [
+  { label: 'Fashion & lifestyle', title: 'Apparel & accessories', note: 'Everyday and boutique fashion across the retail floors, with accessories and footwear to match a full shopping loop.' },
+  { label: 'Tech & mobile', title: 'Gadgets & devices', note: 'Phone, laptop and accessory specialists for upgrades and repairs, including mobile and electronics counters.' },
+  { label: 'Home & grocery', title: 'The Landmark', note: 'The Landmark department store and supermarket anchor the mall with home, lifestyle and daily essentials.' },
+  { label: 'Dining & events', title: 'Food & Activity Center', note: 'Restaurants, cafés and quick bites across the levels, with the Activity Center hosting mall events and programmes.' },
+];
+
 const attractionLd = {
   '@context': 'https://schema.org',
-  '@type': ['TouristAttraction', 'LocalBusiness'],
+  '@type': ['ShoppingCenter', 'LocalBusiness', 'TouristAttraction'],
   name: 'TriNoma',
   alternateName: 'TriNoma Mall',
   description,
+  hasMap: 'https://maps.app.goo.gl/b6AwEDVqWVTFLGhP9',
+  sameAs: ['https://www.ayalamalls.com/main/malls/ayala-trinoma'],
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'EDSA corner North Avenue',
@@ -179,6 +211,9 @@ const faqLd = {
     <meta name="robots" content="index,follow,max-image-preview:large" />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preload" as="image" href="/images/trinoma-exterior.webp" fetchpriority="high" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
@@ -186,6 +221,8 @@ const faqLd = {
     {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
     <meta name="twitter:card" content={socialImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
@@ -214,6 +251,8 @@ const faqLd = {
         <nav class="hidden items-center gap-1 rounded-full bg-charcoal/85 p-1.5 text-sm font-semibold text-white backdrop-blur md:flex" aria-label="Primary navigation">
           <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#visit">Plan</a>
           <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#eat">Eat</a>
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#hours">Hours</a>
+          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#directory">Directory</a>
           <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#arrive">Arrive</a>
           <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#nearby">Nearby</a>
           <a class="rounded-full bg-lime px-4 py-2 text-charcoal hover:brightness-95" href="#map">Map</a>
@@ -240,11 +279,11 @@ const faqLd = {
               <span class="h-2 w-2 rounded-full bg-lime"></span>
               North EDSA · Quezon City
             </div>
-            <h1 class="font-display text-[clamp(3.5rem,10vw,8.6rem)] leading-[.83] tracking-[-.055em]">
-              City energy.<br /><span class="italic text-lime">Garden pause.</span>
+            <h1 class="font-display text-[clamp(3rem,9vw,7.6rem)] leading-[.9] tracking-[-.05em]">
+              TriNoma Mall<br /><span class="italic text-lime">Quezon City</span>
             </h1>
             <p class="mt-8 max-w-2xl text-lg leading-8 text-white/78 md:text-xl">
-              A visitor-first guide to TriNoma—part North EDSA shopping hub, part landscaped breather, with MRT-3 access built into the rhythm of the day.
+              City energy on North EDSA, garden pause by the restaurants—a visitor-first guide to TriNoma, with MRT-3 access built into the rhythm of the day.
             </p>
             <div class="mt-9 flex flex-wrap gap-3">
               <a href="#visit" class="rounded-full bg-lime px-6 py-3.5 font-extrabold text-charcoal transition hover:-translate-y-0.5">Build your visit</a>
@@ -378,6 +417,14 @@ const faqLd = {
                 <p class="copy mt-2 text-sm">Examples from the mall’s dining mix; check the live directory for relocations, closures and new openings.</p>
               </div>
             </div>
+            <div class="mt-9 grid gap-3 sm:grid-cols-2">
+              {diningCategories.map((cat) => (
+                <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
+                  <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">{cat.label}</div>
+                  <p class="copy mt-2 text-sm">{cat.note}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -434,6 +481,27 @@ const faqLd = {
         </div>
       </section>
 
+      <section id="hours" class="py-24 md:py-32">
+        <div class="shell">
+          <div class="max-w-3xl">
+            <span class="eyebrow">Mall hours</span>
+            <h2 class="section-title">Plan around the <span class="italic text-canopy-600">opening times.</span></h2>
+            <p class="copy mt-6 text-lg">Standard operating hours are listed below. Holiday, cinema and special-event schedules can shift, so confirm the live directory or signage before a time-sensitive visit.</p>
+          </div>
+          <div class="mt-12 grid gap-4 md:grid-cols-2">
+            <div class="rounded-[2rem] border border-charcoal/10 bg-white p-7 md:p-8">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-600">Monday – Friday</div>
+              <div class="mt-3 font-display text-4xl tracking-tight">11:00 AM – 9:00 PM</div>
+            </div>
+            <div class="rounded-[2rem] border border-charcoal/10 bg-white p-7 md:p-8">
+              <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-600">Saturday – Sunday</div>
+              <div class="mt-3 font-display text-4xl tracking-tight">10:00 AM – 10:00 PM</div>
+            </div>
+          </div>
+          <p class="mt-4 text-xs leading-5 text-charcoal/50">Parking buildings (North and Mindanao) are listed by Ayala Malls with operating hours of about 5:00 AM–2:00 AM; overnight stays beyond that window are treated as overnight parking. Rates and notices can change—check at entry.</p>
+        </div>
+      </section>
+
       <section class="py-24 md:py-32">
         <div class="shell">
           <div class="grid gap-5 lg:grid-cols-3">
@@ -484,6 +552,28 @@ const faqLd = {
               <h3 class="mt-5 font-display text-2xl">Quezon Memorial Circle</h3>
               <p class="copy mt-3 text-sm">A landmark-and-park counterpoint if you want to stretch the day beyond North EDSA.</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="directory" class="py-24 md:py-32">
+        <div class="shell">
+          <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-20">
+            <div>
+              <span class="eyebrow">Inside the mall</span>
+              <h2 class="section-title">A directory that mixes <span class="italic text-canopy-600">retail and green.</span></h2>
+              <p class="copy mt-6 text-lg">TriNoma layers fashion, tech, home and dining across its levels, anchored by The Landmark department store and supermarket. The landscaped Garden Restaurants area sits at the open-air heart of the visit.</p>
+              <a href="https://www.ayalamalls.com/main/malls/ayala-trinoma" target="_blank" rel="noopener noreferrer" class="mt-7 inline-flex rounded-full bg-charcoal px-5 py-3 font-extrabold text-white hover:bg-canopy-700">Open the live directory ↗</a>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              {storeCategories.map((cat) => (
+                <article class="rounded-[2rem] bg-canopy-100 p-7">
+                  <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-700">{cat.label}</div>
+                  <h3 class="mt-4 font-display text-2xl tracking-tight">{cat.title}</h3>
+                  <p class="copy mt-3 text-sm">{cat.note}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>

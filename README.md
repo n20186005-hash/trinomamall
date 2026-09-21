@@ -30,24 +30,30 @@ pnpm check
 pnpm build
 ```
 
-## Production domain: one setting only
+## Production domain
 
-Open `astro.config.mjs` and change only this line when the real production origin is known:
+The production origin is set once in `astro.config.mjs`:
 
 ```js
-const site = '';
+const site = 'https://trinomamall.com';
 ```
 
-For example, set it to your final HTTPS origin after registration. Do **not** add the domain elsewhere.
+Set `site` there and nowhere else. When it is set:
 
-When `site` is empty:
+- canonical, `og:url`, and absolute Open Graph image URLs derive from `Astro.site`;
+- absolute `url` / `image` fields are added to the attraction JSON-LD;
+- `@astrojs/sitemap` is enabled and emits `dist/sitemap-index.xml`;
+- `public/robots.txt` already points to `https://trinomamall.com/sitemap-index.xml`.
 
-- the project still builds;
-- canonical, `og:url`, and absolute Open Graph image URLs are omitted rather than filled with a fake host;
-- absolute `url` / `image` fields are omitted from the attraction JSON-LD;
-- `@astrojs/sitemap` is not enabled, so no sitemap with a placeholder origin can be emitted.
+## HTTPS and domain normalization
 
-When `site` is set, canonical / Open Graph / JSON-LD URLs derive from `Astro.site`, and the sitemap integration turns on automatically.
+This static site is served from Cloudflare Workers Static Assets. To avoid the duplicate-content and weight-splitting seen in Search Console for `http://` and `www.` variants:
+
+- enable **Always Use HTTPS** in the Cloudflare dashboard (HTTP → HTTPS 301);
+- `public/_headers` ships an HSTS header (`Strict-Transport-Security`) for all responses;
+- serve only the apex `https://trinomamall.com`; do not publish a `www.` hostname, or 301 it to the apex at the edge.
+
+Static image assets under `/images/*` also get a long `Cache-Control` via `public/_headers`, which helps mobile Core Web Vitals.
 
 ## Cloudflare Workers deployment
 

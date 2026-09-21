@@ -3,8 +3,8 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 // Production origin: set it here once (for example, your real registered domain).
-// Keep empty until a domain is ready; the project still builds without it.
-const site = '';
+// When set, canonical/OG URLs, JSON-LD absolute URLs, and the sitemap are derived from it.
+const site = 'https://trinomamall.com';
 
 export default defineConfig({
   ...(site ? { site } : {}),
