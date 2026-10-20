@@ -38,7 +38,7 @@ The production origin is set once in `astro.config.mjs`:
 const site = 'https://trinomamall.com';
 ```
 
-Set `site` there and nowhere else. When it is set:
+Set the canonical origin there and keep the Worker redirect host aligned with it. When it is set:
 
 - canonical, `og:url`, and absolute Open Graph image URLs derive from `Astro.site`;
 - absolute `url` / `image` fields are added to the attraction JSON-LD;
@@ -47,11 +47,7 @@ Set `site` there and nowhere else. When it is set:
 
 ## HTTPS and domain normalization
 
-This static site is served from Cloudflare Workers Static Assets. To avoid the duplicate-content and weight-splitting seen in Search Console for `http://` and `www.` variants:
-
-- enable **Always Use HTTPS** in the Cloudflare dashboard (HTTP → HTTPS 301);
-- `public/_headers` ships an HSTS header (`Strict-Transport-Security`) for all responses;
-- serve only the apex `https://trinomamall.com`; do not publish a `www.` hostname, or 301 it to the apex at the edge.
+The Worker runs before the ASSETS binding and sends HTTP/www requests to the HTTPS apex with a 301, preserving paths and query strings. Unknown paths remain real 404 responses with noindex metadata and a response header. `public/_headers` supplies HSTS. Verify the production domain bindings and redirect responses after release.
 
 Static image assets under `/images/*` also get a long `Cache-Control` via `public/_headers`, which helps mobile Core Web Vitals.
 

@@ -2,15 +2,10 @@
 import '../styles/global.css';
 
 const siteUrl = Astro.site;
-const pageTitle = 'TriNoma Mall Quezon City Visitor Guide';
-const description = 'TriNoma Mall in Quezon City: MRT-3 North Avenue access, free entry, garden restaurants, parking, mall hours (Mon–Fri 11 AM–9 PM, Sat–Sun 10 AM–10 PM) and a store directory. Plan your visit.';
+const pageTitle = 'TriNoma Mall Quezon City: Hours, Directory & Directions';
+const description = 'Plan a TriNoma Mall visit in Quezon City: official directory links, sourced mall hours, MRT-3 North Avenue directions, parking options and visitor contact details.';
 const canonicalUrl = siteUrl ? new URL(Astro.url.pathname, siteUrl).href : undefined;
 const socialImageUrl = siteUrl ? new URL('/images/trinoma-exterior.webp', siteUrl).href : undefined;
-
-const openingHours = [
-  { day: 'Monday–Friday', hours: '11:00 AM–9:00 PM' },
-  { day: 'Saturday–Sunday', hours: '10:00 AM–10:00 PM' },
-];
 
 const planStops = [
   {
@@ -59,30 +54,30 @@ const planStops = [
 
 const airportRoutes = [
   {
-    mode: 'Fastest',
+    mode: 'Direct car',
     title: 'Taxi / Grab direct',
-    note: 'From NAIA T1, T2, T3 or T4, set your destination directly to TriNoma. In lighter traffic this is usually the simplest option; during peak periods, allow a wider time buffer.',
+    note: 'From your operating NAIA terminal, use its authorized taxi or ride-hailing pickup and set your destination to TriNoma. In lighter traffic this is usually the simplest option; during peak periods, allow a wider time buffer.',
   },
   {
-    mode: 'More predictable',
+    mode: 'Rail connection',
     title: 'Airport transfer + MRT-3',
     note: 'Take a taxi or ride-hailing car from the airport to MRT-3 Taft Avenue Station, then board a northbound train to North Avenue Station. From there, use the pedestrian connection toward TriNoma.',
   },
   {
-    mode: 'Budget-first',
+    mode: 'Check current buses',
     title: 'Airport bus / PITX + North Avenue',
-    note: 'If keeping costs lower matters most, take an airport bus or shuttle to PITX, then transfer to a northbound bus toward North Avenue and finish with a short walk or local ride to TriNoma. Stops and dispatch points may shift, so confirm on-site signage.',
+    note: 'Ask the airport transport desk about current buses, terminal transfers and North Avenue connections. Routes, dispatch points, fares and transfers have not been verified here; check the operator before relying on a bus itinerary.',
   },
 ];
 
 const faqs = [
   {
     q: 'Is there an entrance fee for TriNoma?',
-    a: 'General mall entry is free. You pay only for what you choose to buy or use, such as food, shopping, cinema tickets, entertainment, parking, or separately ticketed events.',
+    a: 'This guide does not sell admission tickets. Confirm any event or activity admission rules with Ayala Malls, and budget separately for shopping, food, cinema, entertainment and parking.',
   },
   {
     q: 'What are TriNoma’s mall hours?',
-    a: 'Standard hours are Monday–Friday 11:00 AM–9:00 PM and Saturday–Sunday 10:00 AM–10:00 PM. Holiday and special-event schedules can differ, so check the live directory or on-site notices before a time-sensitive visit.',
+    a: 'The Ayala Malls TriNoma mall page, checked on 19 October 2026, lists Monday–Friday 11:00 AM–9:00 PM and Saturday–Sunday 10:00 AM–10:00 PM. Individual stores, cinemas, holidays and special events can follow different schedules; confirm with the mall before a time-sensitive visit.',
   },
   {
     q: 'Which train station is best for TriNoma?',
@@ -110,7 +105,7 @@ const faqs = [
   },
   {
     q: 'Can I park at TriNoma?',
-    a: 'Yes. Ayala Malls lists the North and Mindanao carpark buildings. Posted operating hours and rates can change, so confirm the signage at the entrance before leaving your vehicle for an extended period.',
+    a: 'Ayala Malls lists Mindanao Open Parking as 24/7 and North/Mindanao Carpark as 5:00 AM–2:00 AM, with stays after 2:00 AM treated as overnight. These details were checked on 19 October 2026. Current rates are not verified here; confirm signs and conditions at entry.',
   },
   {
     q: 'Does the itinerary feature send my data anywhere?',
@@ -119,8 +114,8 @@ const faqs = [
 ];
 
 const diningCategories = [
-  { label: 'Japanese & ramen', note: 'Ramen counters and Japanese comfort food, such as Hanamaruken Ramen, Shou La Mien and Ramen Kuroda.' },
-  { label: 'Italian & American', note: 'Sit-down favourites like Italianni’s and TGI Friday’s for a slower shared meal.' },
+  { label: 'Japanese & ramen', note: 'Check the current directory for ramen and Japanese dining, then confirm the store location and hours.' },
+  { label: 'Italian & American', note: 'Use the official directory to compare sit-down choices for a shared meal.' },
   { label: 'Filipino & quick bites', note: 'Casual Filipino plates and fast-food counters for a fast refuel between shopping blocks.' },
   { label: 'Cafés & dessert', note: 'Coffee stops and sweet breaks spread across the indoor levels and garden side.' },
 ];
@@ -134,7 +129,7 @@ const storeCategories = [
 
 const attractionLd = {
   '@context': 'https://schema.org',
-  '@type': ['ShoppingCenter', 'LocalBusiness', 'TouristAttraction'],
+  '@type': 'ShoppingCenter',
   name: 'TriNoma',
   alternateName: 'TriNoma Mall',
   description,
@@ -166,14 +161,6 @@ const attractionLd = {
       closes: '22:00',
     },
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '3.9',
-    reviewCount: '78',
-    bestRating: '5',
-  },
-  isAccessibleForFree: true,
-  priceRange: 'Free general entry; shopping, dining, parking and paid attractions vary',
   ...(siteUrl
     ? {
         url: new URL('/', siteUrl).href,
@@ -230,8 +217,8 @@ const faqLd = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(attractionLd)}></script>
-    <script type="application/ld+json" set:html={JSON.stringify(faqLd)}></script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(attractionLd)}></script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqLd)}></script>
 
     <!-- GA4: the only third-party script intentionally loaded by this guide. -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
@@ -243,19 +230,19 @@ const faqLd = {
     </script>
   </head>
   <body class="overflow-x-hidden antialiased">
-    <header class="absolute inset-x-0 top-0 z-30 py-5">
-      <div class="shell flex items-center justify-between gap-5">
+    <header class="relative z-30 bg-charcoal py-5 xl:absolute xl:inset-x-0 xl:top-0 xl:bg-transparent">
+      <div class="shell flex flex-wrap items-center justify-between gap-4">
         <a href="#top" class="rounded-full bg-white/90 px-4 py-3 shadow-lg shadow-black/10 backdrop-blur" aria-label="TriNoma visitor guide home">
           <img src="/logo.svg" width="178" height="40" alt="TriNoma Visitor Guide" />
         </a>
-        <nav class="hidden items-center gap-1 rounded-full bg-charcoal/85 p-1.5 text-sm font-semibold text-white backdrop-blur md:flex" aria-label="Primary navigation">
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#visit">Plan</a>
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#eat">Eat</a>
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#hours">Hours</a>
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#directory">Directory</a>
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#arrive">Arrive</a>
-          <a class="rounded-full px-4 py-2 hover:bg-white/10" href="#nearby">Nearby</a>
-          <a class="rounded-full bg-lime px-4 py-2 text-charcoal hover:brightness-95" href="#map">Map</a>
+        <nav class="grid w-full grid-cols-3 gap-1 rounded-2xl bg-charcoal/85 p-1.5 text-sm font-semibold text-white backdrop-blur xl:flex xl:w-auto xl:items-center xl:rounded-full" aria-label="Primary navigation">
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#visit">Plan</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#eat">Eat</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#hours">Hours</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#directory">Directory</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#arrive">Arrive</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full px-4 py-2 hover:bg-white/10" href="#nearby">Nearby</a>
+          <a class="flex min-h-11 items-center justify-center rounded-full bg-lime px-4 py-2 text-charcoal hover:brightness-95" href="#map">Map</a>
         </nav>
       </div>
     </header>
@@ -306,8 +293,8 @@ const faqLd = {
             <div class="mt-2 font-display text-2xl tracking-tight">MRT-3 North Ave.</div>
           </div>
           <div class="p-5 md:p-7">
-            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">General entry</div>
-            <div class="mt-2 font-display text-2xl tracking-tight">Free</div>
+            <div class="text-[.68rem] font-extrabold uppercase tracking-[.16em] text-canopy-600">Directory</div>
+            <a href="https://www.ayalamalls.com/main/malls/ayala-trinoma" class="mt-2 inline-flex min-h-11 items-center font-display text-2xl tracking-tight underline">Ayala Malls ↗</a>
           </div>
         </div>
       </section>
@@ -403,18 +390,18 @@ const faqLd = {
             <div class="mt-9 space-y-3">
               <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
                 <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">Ramen mood</div>
-                <div class="mt-1 font-display text-2xl">Hanamaruken Ramen</div>
+                <div class="mt-1 font-display text-2xl">Check current ramen options</div>
                 <p class="copy mt-2 text-sm">A comfortable sit-down option when you want something warm and substantial.</p>
               </div>
               <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
                 <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">Long lunch</div>
-                <div class="mt-1 font-display text-2xl">Italianni’s</div>
+                <div class="mt-1 font-display text-2xl">Compare sit-down restaurants</div>
                 <p class="copy mt-2 text-sm">An easy pick for a slower shared meal between shopping blocks.</p>
               </div>
               <div class="rounded-3xl border border-charcoal/10 bg-white p-5">
                 <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">More choices</div>
-                <div class="mt-1 font-display text-2xl">Shou La Mien · Ramen Kuroda · TGI Friday’s</div>
-                <p class="copy mt-2 text-sm">Examples from the mall’s dining mix; check the live directory for relocations, closures and new openings.</p>
+                <div class="mt-1 font-display text-2xl">Browse the official dining directory</div>
+                <p class="copy mt-2 text-sm">Check the official directory for current tenants, relocations and new openings.</p>
               </div>
             </div>
             <div class="mt-9 grid gap-3 sm:grid-cols-2">
@@ -481,12 +468,14 @@ const faqLd = {
         </div>
       </section>
 
+      <section class="bg-canopy-100 py-8"><div class="shell"><h2 class="text-xl font-bold">Sources and visitor help</h2><p class="mt-3 leading-7">Checked 19 October 2026: <a class="underline" href="https://maps.app.goo.gl/b6AwEDVqWVTFLGhP9">Google Maps</a> listed 4.5/5 from 14,164 reviews. This is a Google Maps rating, not reviews collected by this guide. The mall is at EDSA corner North Avenue, Quezon City, Metro Manila.</p><p class="mt-3 leading-7">Ayala Malls lists its concierge at Level 1 near the Activity Center: <a class="underline" href="tel:+639178138165">+63 917 813 8165</a>. Confirm current hours, tenant locations and event arrangements with the mall.</p></div></section>
+
       <section id="hours" class="py-24 md:py-32">
         <div class="shell">
           <div class="max-w-3xl">
             <span class="eyebrow">Mall hours</span>
             <h2 class="section-title">Plan around the <span class="italic text-canopy-600">opening times.</span></h2>
-            <p class="copy mt-6 text-lg">Standard operating hours are listed below. Holiday, cinema and special-event schedules can shift, so confirm the live directory or signage before a time-sensitive visit.</p>
+            <p class="copy mt-6 text-lg">Mall-wide hours from the <a class="underline" href="https://www.ayalamalls.com/main/malls/ayala-trinoma//1000">official Ayala Malls page</a>, checked 19 October 2026. Store-level listings may differ; use each tenant’s schedule for a specific shop. Confirm holiday, cinema and special-event changes before travelling.</p>
           </div>
           <div class="mt-12 grid gap-4 md:grid-cols-2">
             <div class="rounded-[2rem] border border-charcoal/10 bg-white p-7 md:p-8">
@@ -498,7 +487,7 @@ const faqLd = {
               <div class="mt-3 font-display text-4xl tracking-tight">10:00 AM – 10:00 PM</div>
             </div>
           </div>
-          <p class="mt-4 text-xs leading-5 text-charcoal/50">Parking buildings (North and Mindanao) are listed by Ayala Malls with operating hours of about 5:00 AM–2:00 AM; overnight stays beyond that window are treated as overnight parking. Rates and notices can change—check at entry.</p>
+          <p class="mt-4 text-xs leading-5 text-charcoal/50">Checked 19 October 2026: Ayala Malls lists Mindanao Open Parking as 24/7, and North/Mindanao Carpark as 5:00 AM–2:00 AM with stays after 2:00 AM treated as overnight. Rates are not verified here; check current entrance signs.</p>
         </div>
       </section>
 
@@ -507,13 +496,13 @@ const faqLd = {
           <div class="grid gap-5 lg:grid-cols-3">
             <article class="rounded-[2rem] bg-canopy-100 p-7 md:p-8">
               <div class="text-xs font-black uppercase tracking-[.15em] text-canopy-700">Tickets / cost</div>
-              <h2 class="mt-3 font-display text-4xl tracking-tight">Walk in free.</h2>
-              <p class="copy mt-4">There is no general admission ticket for the mall. Budget separately for cinema, entertainment, food, shopping, parking and any special ticketed event.</p>
+              <h2 class="mt-3 font-display text-4xl tracking-tight">Check what you plan to use.</h2>
+              <p class="copy mt-4">This independent guide does not sell tickets. Confirm any event admission policy with Ayala Malls; budget separately for cinema, entertainment, food, shopping and parking.</p>
             </article>
             <article class="rounded-[2rem] bg-charcoal p-7 text-white md:p-8">
               <div class="text-xs font-black uppercase tracking-[.15em] text-lime">Parking</div>
               <h2 class="mt-3 font-display text-4xl tracking-tight">North + Mindanao.</h2>
-              <p class="mt-4 leading-7 text-white/65">Ayala Malls lists North and Mindanao carpark buildings, with the official page noting 5:00 AM–2:00 AM and stays beyond 2:00 AM treated as overnight. Check current rates and notices at entry.</p>
+              <p class="mt-4 leading-7 text-white/65">Ayala Malls lists Mindanao Open Parking (24/7) and North/Mindanao Carpark (5:00 AM–2:00 AM; after 2:00 AM treated as overnight). Checked 19 October 2026; confirm current rates and notices at entry.</p>
             </article>
             <article class="rounded-[2rem] bg-[#e8d5c7] p-7 md:p-8">
               <div class="text-xs font-black uppercase tracking-[.15em] text-[#7c4c35]">Best visit / duration</div>
@@ -680,7 +669,7 @@ const faqLd = {
             <div class="text-xs font-black uppercase tracking-[.14em] text-canopy-600">On this device</div>
             <h2 class="mt-1 font-display text-2xl">My TriNoma day</h2>
           </div>
-          <button id="plan-close" type="button" class="flex h-9 w-9 items-center justify-center rounded-full bg-charcoal/5 font-bold" aria-label="Close itinerary">×</button>
+          <button id="plan-close" type="button" class="flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/5 font-bold" aria-label="Close itinerary">×</button>
         </div>
         <div id="plan-empty" class="mt-5 rounded-2xl bg-canopy-50 p-4 text-sm leading-6 text-charcoal/60">Nothing saved yet. Add a stop from the itinerary cards.</div>
         <ol id="plan-items" class="mt-4 space-y-2"></ol>
@@ -725,7 +714,7 @@ const faqLd = {
       let plan: PlanItem[] = readPlan();
 
       const writePlan = () => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(plan)); } catch { /* Keep the itinerary usable for this visit when browser storage is unavailable. */ }
       };
 
       const syncButtons = () => {
@@ -768,7 +757,7 @@ const faqLd = {
 
           const remove = document.createElement('button');
           remove.type = 'button';
-          remove.className = 'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-charcoal/40 hover:bg-charcoal/5';
+          remove.className = 'flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-charcoal/40 hover:bg-charcoal/5';
           remove.setAttribute('aria-label', `Remove ${item.title}`);
           remove.textContent = '×';
           remove.addEventListener('click', () => {
